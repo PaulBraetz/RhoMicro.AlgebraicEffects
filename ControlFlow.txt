@@ -1,0 +1,84 @@
+@startuml
+note left
+    //source: https://overreacted.io/algebraic-effects-for-the-rest-of-us/
+    function getName(user) {
+        let name = user.name;
+        if (name === null) {
+            name = perform 'ask_name';
+        }
+        return name;
+    }
+    
+    function makeFriends(user1, user2) {
+        user1.friendNames.push(getName(user2));
+        user2.friendNames.push(getName(user1));
+    }
+    
+    const arya = { name: null, friendNames: [] };
+    const gendry = { name: 'Gendry', friendNames: [] };
+    
+    function connect() {
+        try {
+            makeFriends(arya, gendry);
+        } handle (effect) {
+            if (effect === 'ask_name') {
+                resume with 'Arya Stark';
+            }
+        }
+    }
+end note
+
+connect -> makeFriends: (arya, gendry)
+note left 
+makeFriends(arya, gendry);
+end note
+makeFriends -> getName: (gendry)
+note left 
+getName(user2)
+end note
+getName -> makeFriends: 'Gendry'
+note right
+    function getName(user) {
+        let name = user.name;
+        if (name === null) {
+            // not hit
+        }
+        return name;
+    }
+end note
+makeFriends -> getName: (arya)
+note left 
+getName(user1)
+end note
+getName --> context: perform 'ask_name'
+note left
+    function getName(user) {
+        let name = user.name;
+        if (name === null) {
+            name = perform 'ask_name';
+        }
+        return name;
+    }
+end note
+context --> connect: perform 'ask_name'
+note right
+bubble up
+end note
+connect --> context: resume with 'Arya Stark'
+note left
+hit handler
+end note
+context --> getName: resume with 'Arya Stark'
+note right
+return handler result
+end note
+getName -> makeFriends: 'Arya Stark'
+note right
+return name;
+end note
+makeFriends -> connect: void
+note right
+done
+end note
+
+@enduml
