@@ -7,9 +7,9 @@ If you are new to algebraic effects, here is a great explanation: https://overre
 # How to Use
 Effects can be handles using the `Effect<>` type:
 
-`Effect<AskForName>.Handle(EffectHandler<T> handler)`
+`Effect<T>.Handle(EffectHandler<T> handler)`
 
-`Effect<AskForName>.HandleAsync(AsyncEffectHandler<T> handler)`
+`Effect<T>.HandleAsync(AsyncEffectHandler<T> handler)`
 
 `Handle` and `HandleAsync` both return an instance of `IDisposable` that manages the lifetime of the handler registration:
 
