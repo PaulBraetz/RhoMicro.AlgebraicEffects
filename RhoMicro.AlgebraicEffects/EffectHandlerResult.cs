@@ -10,6 +10,11 @@ using RhoMicro.CodeAnalysis;
 [UnionTypeSettings(ToStringSetting = ToStringSetting.Simple)]
 public readonly partial struct EffectHandlerResult<T>
 {
+    /// <summary>
+    /// The unit result.
+    /// </summary>
+    public static readonly EffectHandlerResult<T> Unit = CreateFromUnit(new());
+
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
     public static Boolean operator ==(EffectHandlerResult<T> left, EffectHandlerResult<T> right) =>
         left.Equals(right);

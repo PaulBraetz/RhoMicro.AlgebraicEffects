@@ -17,6 +17,7 @@ sealed partial class EffectContext<T>
         {
             handlers.Push(handler);
         }
+
         _handlers = handlers;
         Release();
     }

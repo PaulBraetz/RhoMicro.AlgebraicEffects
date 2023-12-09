@@ -13,11 +13,12 @@ internal partial class Program
 
     private static async Task Main(String[] _0)
     {
-        using var _ = Effect<AskForName>.Handle(() => 
-            EffectHandlerResult<AskForName>.CreateFromResult("Arya Stark"));
-        var firstConnect = Task.Run(Connect);
-        await firstConnect;
-        await Connect();
+        using(var _ = Effect<AskForName>.Handle(() => EffectHandlerResult<AskForName>.CreateFromResult("Arya Stark")))
+        {
+            var firstConnect = Task.Run(Connect);
+            await firstConnect;
+            await Connect();
+        }
     }
 
     static async Task Connect()
@@ -35,6 +36,7 @@ internal partial class Program
         user1.FriendNames.Add(await GetName(user2));
         user2.FriendNames.Add(await GetName(user1));
     }
+
     [UnionType(typeof(String), Options = UnionTypeOptions.ImplicitConversionIfSolitary)]
     readonly partial struct AskForName;
     static async Task<String> GetName(User user)
